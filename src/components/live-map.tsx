@@ -12,7 +12,6 @@ import {
   secondMarshalPoint,
   userPoint,
 } from "@/lib/map-data";
-import { useTraffic } from "@/lib/traffic-store";
 import { cn } from "@/lib/utils";
 
 export interface SafeWalkMapRoute {
@@ -194,31 +193,6 @@ export default function LiveMap({
   safeWalkRoute?: SafeWalkMapRoute | null;
 }) {
   let recenter = () => {};
-  const s = useTraffic();
-  const theme = s.theme;
-
-  const routeColors = useMemo(() => {
-    if (theme === "amber-red") {
-      return {
-        main: "#c2410c",
-        glow: "#ea580c",
-        accent: "#9a3412",
-      };
-    }
-    if (theme === "amber-orange") {
-      return {
-        main: "#ea580c",
-        glow: "#f59e0b",
-        accent: "#d97706",
-      };
-    }
-    return {
-      main: "#2E6F40",
-      glow: "#52B788",
-      accent: "#47715C",
-    };
-  }, [theme]);
-
   const [layers, setLayers] = useState({ hazards: true, verified: true });
   const visibleHazards = useMemo(() => {
     if (!radar || !layers.hazards) return [];
@@ -281,7 +255,7 @@ export default function LiveMap({
         {route && (
           <Polyline
             positions={routePath}
-            pathOptions={{ color: routeColors.accent, weight: 4, dashArray: "8 10", opacity: 0.9 }}
+            pathOptions={{ color: "#2563eb", weight: 4, dashArray: "8 10", opacity: 0.9 }}
           />
         )}
         {safeWalkRoute?.active && safeWalkRoute.path.length > 0 && (
@@ -289,7 +263,7 @@ export default function LiveMap({
             <Polyline
               positions={safeWalkRoute.path}
               pathOptions={{
-                color: routeColors.glow,
+                color: "#38bdf8",
                 weight: 12,
                 opacity: 0.38,
                 lineCap: "round",
@@ -299,7 +273,7 @@ export default function LiveMap({
             <Polyline
               positions={safeWalkRoute.path}
               pathOptions={{
-                color: routeColors.main,
+                color: "#0284c7",
                 weight: 5,
                 opacity: 0.95,
                 dashArray: "10 12",

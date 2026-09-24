@@ -6,6 +6,8 @@ import { Avatar, Eyebrow, Logo } from "./common";
 import { NotificationBell } from "./notification-bell";
 import { SosDock } from "./sos-dock";
 import { Button } from "@/components/ui/button";
+import { InfoButton } from "@/components/info-sheet";
+import { AnimatedShield } from "@/components/animated-icons";
 
 export function ProgressRail({
   labels,
@@ -119,7 +121,7 @@ export function Header({
         "glass-header absolute inset-x-4 top-[max(14px,env(safe-area-inset-top))] z-20 overflow-hidden",
         mission && "mission-header",
         flow && "flow-active-header",
-        celebrating && "border-safe/40 bg-safe-soft/90",
+        celebrating && "border-primary/40 bg-accent/90",
         safeWalkLive && "border-safe/40 bg-card/96 shadow-warm",
       )}
     >
@@ -134,11 +136,11 @@ export function Header({
             className="p-3"
           >
             <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-safe text-white shadow-soft">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-primary text-white shadow-soft">
                 <Check className="h-5 w-5 stroke-[2.5]" />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-safe">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-primary">
                   <PartyPopper className="h-3.5 w-3.5" />
                   <span>Mission Completed!</span>
                 </div>
@@ -170,13 +172,13 @@ export function Header({
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2.5 min-w-0">
                 <span className="relative grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-safe text-white shadow-soft">
-                  <Footprints className="h-4 w-4" />
-                  <span className="absolute -inset-1 animate-ping rounded-xl bg-safe/25 duration-1000" />
+                  <AnimatedShield size={18} active />
                 </span>
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-safe">
                     <span className="inline-block h-2 w-2 rounded-full bg-safe animate-pulse" />
                     SafeWalk Live
+                    <InfoButton topic="safewalk-protocol" size="sm" title="SafeWalk Protocol" />
                   </div>
                   <b className="block truncate text-xs font-extrabold text-foreground">
                     {safeWalkDestination ?? s.safeWalk?.destination ?? "Destination"}
@@ -282,9 +284,12 @@ export function Header({
                 </p>
               </div>
             </div>
-            <div className="mt-2 flex items-center gap-1 text-[10px] font-bold text-primary">
-              <ShieldCheck className="h-3 w-3" />
-              {s.verificationState}
+            <div className="mt-2 flex items-center justify-between">
+              <div className="flex items-center gap-1 text-[10px] font-bold text-primary">
+                <ShieldCheck className="h-3 w-3" />
+                {s.verificationState}
+              </div>
+              <InfoButton topic="marshal-verification" size="sm" title="Marshal Verification Standards" />
             </div>
             <ProgressRail
               labels={
@@ -313,7 +318,8 @@ export function Header({
                 Good morning, {s.persona === "marshal" ? "Riya" : "Aarav"}
               </p>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
+              <InfoButton topic="civic-score" size="sm" title="Civic Trust & Karma Guide" />
               {showSos && (
                 <>
                   <NotificationBell />

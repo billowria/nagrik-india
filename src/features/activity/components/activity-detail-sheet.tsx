@@ -99,7 +99,7 @@ export function ActivityDetailSheet({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
-  if (!mounted) return null;
+  if (!mounted || typeof document === "undefined" || !document.body) return null;
 
   return createPortal(
     <AnimatePresence>
@@ -127,7 +127,7 @@ export function ActivityDetailSheet({
                 className={cn(
                   "rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider",
                   isResolved
-                    ? "bg-safe-soft text-safe"
+                    ? "bg-accent text-primary"
                     : report.priority === "High"
                       ? "bg-danger-soft text-danger"
                       : "bg-amber-500/15 text-amber-700",
@@ -168,7 +168,7 @@ export function ActivityDetailSheet({
                 <BeforeAfter before={report.photoUrl} after={report.afterPhotoUrl} />
                 <div className="flex items-center justify-between bg-card/90 px-3 py-1.5 text-[11px] font-bold text-muted-foreground">
                   <span>Slide to inspect resolution</span>
-                  <span className="text-safe flex items-center gap-1">
+                  <span className="text-primary flex items-center gap-1">
                     <CheckCircle2 className="h-3.5 w-3.5" /> Verified Fixed
                   </span>
                 </div>
@@ -214,7 +214,7 @@ export function ActivityDetailSheet({
                     className={cn(
                       "absolute -left-6 grid h-6 w-6 place-items-center rounded-full text-[11px] font-black border-2 transition-all",
                       st.done
-                        ? "bg-safe border-safe text-white shadow-xs"
+                        ? "bg-primary border-primary text-white shadow-xs"
                         : st.active
                           ? "bg-primary border-primary text-white animate-pulse"
                           : "bg-card border-border text-muted-foreground",
@@ -246,13 +246,13 @@ export function ActivityDetailSheet({
           {/* Assigned Marshal / Contact Card */}
           <div className="mt-3.5 flex items-center justify-between rounded-2xl border border-border/80 bg-card p-3 shadow-xs">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-safe-soft text-safe font-black text-sm">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-accent text-primary font-black text-sm">
                 VS
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
                   <b className="truncate text-xs font-extrabold text-foreground">Vikram Singh</b>
-                  <span className="rounded bg-safe/15 px-1 py-0.2 text-[9px] font-black text-safe">
+                  <span className="rounded bg-primary/15 px-1 py-0.2 text-[9px] font-black text-primary">
                     Marshal Lead
                   </span>
                 </div>
@@ -318,7 +318,7 @@ export function ActivityDetailSheet({
               className={cn(
                 "h-12 rounded-2xl font-extrabold text-xs text-white shadow-soft",
                 report.supportedByMe
-                  ? "bg-safe hover:bg-safe/90"
+                  ? "bg-primary hover:bg-primary/90"
                   : "bg-primary hover:bg-primary/90",
               )}
               onClick={() => s.supportCommunityReport(report.id)}
@@ -339,6 +339,7 @@ export function ActivityDetailSheet({
           </div>
         </motion.div>
       </div>
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

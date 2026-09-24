@@ -49,7 +49,7 @@ export function TrustPanel() {
             <small
               className={cn(
                 "mt-1 block font-extrabold",
-                b.earned ? "text-safe" : "text-muted-foreground",
+                b.earned ? "text-primary" : "text-muted-foreground",
               )}
             >
               {b.earned ? "Earned" : "Locked"}
@@ -170,7 +170,7 @@ export function RequesterProfilePage() {
         className="mt-5 flex w-full items-center justify-between rounded-2xl bg-cream p-4 text-sm font-bold"
       >
         Notifications{" "}
-        {s.notificationsEnabled ? <ToggleRight className="text-safe" /> : <ToggleLeft />}
+        {s.notificationsEnabled ? <ToggleRight className="text-primary" /> : <ToggleLeft />}
       </button>
 
       <Button

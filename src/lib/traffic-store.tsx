@@ -102,10 +102,7 @@ export {
   wardSeed,
 };
 
-export type AppTheme = "green" | "amber-red" | "amber-orange";
-
 type State = {
-  theme: AppTheme;
   persona: Persona;
   stage: Stage;
   activeJob: Job | null;
@@ -279,7 +276,6 @@ const seedSafeWalkHistory: SafeWalkSummary[] = [
 ];
 
 const initial: State = {
-  theme: "green",
   persona: "requester",
   stage: "none",
   activeJob: null,
@@ -402,7 +398,6 @@ type Store = State & {
   signPetition: (id: string) => void;
   toggleAdoptSpot: (id: string) => void;
   joinPatrol: (id: string) => void;
-  setTheme: (theme: AppTheme) => void;
 };
 const Ctx = createContext<Store | null>(null);
 
@@ -415,17 +410,9 @@ export function TrafficProvider({ children }: { children: ReactNode }) {
         localStorage.getItem("nagrik-state") ?? localStorage.getItem("trafficmitra-state");
       if (saved) {
         const parsed = JSON.parse(saved) as Partial<State>;
-        const activeTheme: AppTheme =
-          parsed.theme === "amber-red" || parsed.theme === "amber-orange" || parsed.theme === "green"
-            ? parsed.theme
-            : "green";
-        if (typeof document !== "undefined") {
-          document.documentElement.setAttribute("data-theme", activeTheme);
-        }
         setState({
           ...initial,
           ...parsed,
-          theme: activeTheme,
           communityReports: parsed.communityReports?.length
             ? parsed.communityReports.map((r) => ({
                 ...r,
@@ -465,14 +452,6 @@ export function TrafficProvider({ children }: { children: ReactNode }) {
             : null,
           sos: null,
         });
-      } else {
-        const localTheme = localStorage.getItem("nagrik_app_theme") as AppTheme | null;
-        if (localTheme === "green" || localTheme === "amber-red" || localTheme === "amber-orange") {
-          if (typeof document !== "undefined") {
-            document.documentElement.setAttribute("data-theme", localTheme);
-          }
-          setState((s) => ({ ...s, theme: localTheme }));
-        }
       }
     } catch {}
     setReady(true);
@@ -600,15 +579,6 @@ export function TrafficProvider({ children }: { children: ReactNode }) {
       unreadCount: state.notifications.filter((n) => n.unread).length,
       myReports: state.communityReports.filter((r) => r.mine),
       openNeeds: state.communityReports.filter((r) => r.status !== "resolved"),
-      setTheme: (theme: AppTheme) => {
-        if (typeof document !== "undefined") {
-          document.documentElement.setAttribute("data-theme", theme);
-        }
-        try {
-          localStorage.setItem("nagrik_app_theme", theme);
-        } catch {}
-        setState((s) => ({ ...s, theme }));
-      },
       setPersona: (persona) => setState((s) => ({ ...s, persona })),
       setStage: (stage) =>
         setState((s) => ({

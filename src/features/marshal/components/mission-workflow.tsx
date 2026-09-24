@@ -52,13 +52,13 @@ export function Checklist({
             onClick={() => setDone((d) => d.map((v, j) => (j === i ? !v : v)))}
             className={cn(
               "flex min-h-12 items-center gap-3 rounded-xl border p-3 text-left text-sm transition",
-              done[i] && "border-safe bg-safe-soft",
+              done[i] && "border-primary bg-accent",
             )}
           >
             <span
               className={cn(
                 "grid h-6 w-6 shrink-0 place-items-center rounded-full border",
-                done[i] && "border-safe bg-safe text-primary-foreground",
+                done[i] && "border-primary bg-primary text-primary-foreground",
               )}
             >
               {done[i] && <Check className="h-4 w-4" />}
@@ -98,7 +98,7 @@ export function Incoming() {
         <span
           className={cn(
             "grid h-12 w-12 shrink-0 place-items-center rounded-2xl",
-            shared ? "bg-safe-soft text-safe" : "bg-danger-soft text-danger",
+            shared ? "bg-accent text-primary" : "bg-danger-soft text-danger",
           )}
         >
           {safe ? <Footprints /> : shared ? <Users /> : <LifeBuoy />}
@@ -135,7 +135,7 @@ export function Incoming() {
           </b>
         </div>
       </div>
-      <div className="mt-3 flex gap-2 rounded-xl bg-safe-soft p-3 text-xs text-safe">
+      <div className="mt-3 flex gap-2 rounded-xl bg-accent p-3 text-xs text-primary">
         <ShieldCheck className="h-4 w-4 shrink-0" />
         {shared
           ? "One verified resolution updates everyone following this report."
@@ -212,7 +212,7 @@ export function Mission() {
               To {s.safeWalk?.destination} · Trusted: {s.safeWalk?.contact}
             </p>
           </div>
-          <span className="rounded-full bg-safe-soft px-2.5 py-1 text-[11px] font-black text-safe">
+          <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-black text-safe">
             {s.safeWalk?.safetyScore}% Safe
           </span>
         </div>
@@ -293,7 +293,7 @@ export function Mission() {
 
             <Button
               size="lg"
-              className="h-12 rounded-2xl bg-safe hover:bg-safe/90 text-white text-xs font-black shadow-warm"
+              className="h-12 rounded-2xl bg-safe hover:bg-primary/90 text-white text-xs font-black shadow-warm"
               onClick={s.finishSafeWalk}
             >
               <Check className="h-4 w-4 mr-1.5 stroke-[3]" />
@@ -404,7 +404,7 @@ export function Mission() {
           onClick={() => pickAfter()}
           className={cn(
             "mt-4 grid min-h-32 w-full place-items-center overflow-hidden rounded-2xl border-2 border-dashed p-3",
-            photo ? "border-safe bg-safe-soft" : "bg-cream",
+            photo ? "border-primary bg-accent" : "bg-cream",
           )}
         >
           {photo ? (

@@ -25,8 +25,8 @@ export function MarshalTrainingPage() {
   if (s.trainingComplete) {
     return (
       <Page title="Training complete" eyebrow="You’re mission-ready">
-        <div className="rounded-3xl bg-safe-soft p-6 text-center">
-          <BadgeCheck className="mx-auto h-14 w-14 text-safe" />
+        <div className="rounded-3xl bg-accent p-6 text-center">
+          <BadgeCheck className="mx-auto h-14 w-14 text-primary" />
           <h2 className="mt-3 text-xl font-extrabold">Safety certified</h2>
           <p className="mt-2 text-sm text-muted-foreground">Your dashboard is now unlocked.</p>
         </div>
@@ -68,7 +68,7 @@ export function MarshalTrainingPage() {
             "Never trade your safety for a faster response",
           ].map((x) => (
             <li key={x} className="flex gap-3 text-sm">
-              <CheckCircle2 className="shrink-0 text-safe" />
+              <CheckCircle2 className="shrink-0 text-primary" />
               {x}
             </li>
           ))}
@@ -121,7 +121,7 @@ export function MarshalTrainingPage() {
                 }}
                 className={cn(
                   "rounded-2xl border bg-card p-4 text-left text-sm font-bold",
-                  answered && (i === 0 ? "border-safe bg-safe-soft" : "opacity-50"),
+                  answered && (i === 0 ? "border-primary bg-accent" : "opacity-50"),
                 )}
               >
                 {a}
@@ -129,7 +129,7 @@ export function MarshalTrainingPage() {
             ))}
           </div>
           {answered && (
-            <div className="mt-5 rounded-2xl bg-safe-soft p-4 text-sm text-safe">
+            <div className="mt-5 rounded-2xl bg-accent p-4 text-sm text-primary">
               <b>Correct approach:</b> safety and clear escalation always come first.
             </div>
           )}
@@ -146,8 +146,8 @@ export function MarshalTrainingPage() {
         </>
       ) : score >= 2 ? (
         <>
-          <div className="rounded-3xl bg-safe-soft p-6 text-center">
-            <BadgeCheck className="mx-auto h-14 w-14 text-safe" />
+          <div className="rounded-3xl bg-accent p-6 text-center">
+            <BadgeCheck className="mx-auto h-14 w-14 text-primary" />
             <b className="mt-3 block text-xl">{score}/3 — Safety certified</b>
           </div>
           <Button className="mt-6 h-14 w-full rounded-2xl" onClick={s.completeTraining}>

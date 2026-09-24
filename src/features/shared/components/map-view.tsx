@@ -120,7 +120,7 @@ export function MapView({
                 </Eyebrow>
                 <h2 className="mt-1 text-base font-extrabold">{chosen.issue}</h2>
               </div>
-              <span className="rounded-full bg-safe-soft px-2 py-1 text-[10px] font-bold text-safe">
+              <span className="rounded-full bg-accent px-2 py-1 text-[10px] font-bold text-primary">
                 {chosen.supporters} affected
               </span>
             </div>

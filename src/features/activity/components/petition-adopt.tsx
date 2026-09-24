@@ -23,7 +23,7 @@ export function PetitionAdopt({ report }: { report: CommunityReport }) {
         <i style={{ width: `${Math.min(100, Math.round((sig / petitionGoal) * 100))}%` }} />
       </div>
       {done ? (
-        <p className="mt-2 flex items-center gap-1.5 text-[11px] font-bold text-safe">
+        <p className="mt-2 flex items-center gap-1.5 text-[11px] font-bold text-primary">
           <Landmark className="h-3.5 w-3.5" />
           Escalated to the ward office
         </p>

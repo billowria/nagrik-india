@@ -14,6 +14,8 @@ import { HistoryList } from "@/features/activity/components/activity-cards";
 import { Page, SectionTitle } from "@/features/shared/components/common";
 import { DevConsole } from "@/features/shared/components/dev-console";
 import { MarshalNav } from "@/features/shared/components/navigation";
+import { InfoButton } from "@/components/info-sheet";
+import { triggerHaptic } from "@/lib/haptics";
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
@@ -37,11 +39,21 @@ export function MarshalWalletPage() {
   return (
     <Page title="Your earnings" eyebrow="Nagrik Wallet" nav={<MarshalNav />}>
       <div className="balance-hero rounded-3xl bg-primary p-6 text-primary-foreground shadow-warm">
-        <p className="text-xs font-bold opacity-80">AVAILABLE BALANCE</p>
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-bold opacity-80">AVAILABLE BALANCE</p>
+          <InfoButton topic="reporting-bounties" size="sm" title="Payout & Token Guide" />
+        </div>
         <div className="mt-1 text-4xl font-extrabold">₹{available.toLocaleString("en-IN")}</div>
         <div className="mt-6 flex items-center justify-between">
           <span className="text-xs">HDFC Bank •••• 1842</span>
-          <Button variant="secondary" className="rounded-xl" onClick={() => setOpen(true)}>
+          <Button
+            variant="secondary"
+            className="rounded-xl"
+            onClick={() => {
+              triggerHaptic("selection");
+              setOpen(true);
+            }}
+          >
             <Banknote />
             Withdraw
           </Button>
@@ -91,7 +103,7 @@ export function MarshalWalletPage() {
           <div className="px-5 pb-[max(24px,env(safe-area-inset-bottom))]">
             {success ? (
               <div className="py-8 text-center">
-                <CheckCircle2 className="mx-auto h-14 w-14 text-safe" />
+                <CheckCircle2 className="mx-auto h-14 w-14 text-primary" />
                 <b className="mt-3 block text-xl">Withdrawal requested</b>
                 <p className="mt-1 text-sm text-muted-foreground">
                   ₹{n.toLocaleString("en-IN")} is on its way.

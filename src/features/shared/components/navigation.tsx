@@ -1,6 +1,8 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { History, Home, Menu, UserRound, Wallet } from "lucide-react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { triggerHaptic } from "@/lib/haptics";
 import type { ComponentType } from "react";
 
 export function Nav({
@@ -31,15 +33,28 @@ export function Nav({
             key={to}
             to={to}
             aria-current={selected ? "page" : undefined}
+            onClick={() => triggerHaptic("selection")}
             className={cn(
-              "nav-item flex min-h-14 min-w-0 flex-col items-center justify-center gap-1 rounded-[20px] px-1 text-[10px] font-bold text-primary transition-[transform,background-color,color] duration-300 active:scale-[0.96]",
-              selected && "is-active",
+              "relative nav-item flex min-h-14 min-w-0 flex-col items-center justify-center gap-1 rounded-[20px] px-1 text-[10px] font-bold transition-colors select-none",
+              selected ? "text-primary font-black" : "text-muted-foreground hover:text-foreground",
             )}
           >
-            <span className="nav-icon grid h-7 w-7 shrink-0 place-items-center">
-              <Icon className="h-5 w-5" fill="currentColor" />
-            </span>
-            <span className="w-full truncate text-center">{label}</span>
+            {selected && (
+              <motion.div
+                layoutId="active-nav-pill"
+                transition={{ type: "spring", stiffness: 450, damping: 32 }}
+                className="absolute inset-0 rounded-[18px] bg-primary/10 border border-primary/25 shadow-xs"
+              />
+            )}
+            <motion.span
+              whileTap={{ scale: 0.84 }}
+              animate={selected ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+              transition={{ duration: 0.3 }}
+              className="relative z-10 nav-icon grid h-7 w-7 shrink-0 place-items-center"
+            >
+              <Icon className="h-5 w-5" fill={selected ? "currentColor" : "none"} />
+            </motion.span>
+            <span className="relative z-10 w-full truncate text-center">{label}</span>
           </Link>
         );
       })}

@@ -34,9 +34,9 @@ export function MarshalKycPage() {
         <SectionTitle>Evidence summary</SectionTitle>
         {["Government ID front", "Government ID back", "Selfie holding ID"].map((x) => (
           <div key={x} className="mb-2 flex items-center gap-3 rounded-2xl border bg-card p-4">
-            <FileCheck2 className="text-safe" />
+            <FileCheck2 className="text-primary" />
             <span className="text-sm font-bold">{x}</span>
-            <Check className="ml-auto text-safe" />
+            <Check className="ml-auto text-primary" />
           </div>
         ))}
         <Button
@@ -71,7 +71,7 @@ export function MarshalKycPage() {
             }}
             className={cn(
               "grid min-h-24 grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border-2 border-dashed bg-card p-4 text-left",
-              files[i] && "border-safe bg-safe-soft",
+              files[i] && "border-primary bg-accent",
             )}
           >
             <span className="grid h-11 w-11 place-items-center rounded-xl bg-orange-soft text-primary">
@@ -90,7 +90,7 @@ export function MarshalKycPage() {
             {loading === i ? (
               <RefreshCw className="animate-spin text-primary" />
             ) : files[i] ? (
-              <CheckCircle2 className="text-safe" />
+              <CheckCircle2 className="text-primary" />
             ) : null}
           </button>
         ))}

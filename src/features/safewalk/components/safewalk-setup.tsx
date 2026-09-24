@@ -415,7 +415,7 @@ export function SafeWalkSetupSheet({
               </Button>
             </div>
             <p className="mt-1 text-xs text-muted-foreground">
-              Select a safe destination or preset. A glowing green corridor is drawn on the live map.
+              Select a safe destination or preset. A glowing electric cyan corridor is drawn on the live map.
             </p>
 
             <div className="relative mt-4">

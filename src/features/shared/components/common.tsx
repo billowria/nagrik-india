@@ -2,14 +2,14 @@ import { type ReactNode } from "react";
 import { Check, History } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTraffic } from "@/lib/traffic-store";
-import nagrikLogoGreen from "@/assets/nagrik-logo-green.png";
+import nagrikLogoBlue from "@/assets/nagrik-logo-blue.jpg";
 import requesterAvatar from "@/assets/requester-avatar.png";
 import marshalAvatar from "@/assets/marshal-avatar.png";
 
 export function Logo({ small = false }: { small?: boolean }) {
   return (
     <img
-      src={nagrikLogoGreen}
+      src={nagrikLogoBlue}
       alt="Nagrik"
       className={cn("object-contain", small ? "h-11 w-[92px]" : "h-28 w-44")}
     />

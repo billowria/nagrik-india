@@ -60,7 +60,7 @@ export function MissionRadar() {
                 </div>
               </div>
               <div className="mt-2 flex items-center gap-3 text-[10px] font-bold text-muted-foreground">
-                <span className="flex items-center gap-1 text-safe">
+                <span className="flex items-center gap-1 text-primary">
                   <Users className="h-3 w-3" />
                   {r.supporters} affected
                 </span>

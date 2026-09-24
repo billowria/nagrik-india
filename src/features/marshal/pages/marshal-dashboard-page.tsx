@@ -20,6 +20,8 @@ import { MapView } from "@/features/shared/components/map-view";
 import { MarshalNav } from "@/features/shared/components/navigation";
 import { Incoming, Mission } from "../components/mission-workflow";
 import { cn } from "@/lib/utils";
+import { InfoButton } from "@/components/info-sheet";
+import { triggerHaptic } from "@/lib/haptics";
 
 export function PatrolBoard() {
   const s = useTraffic();
@@ -30,8 +32,11 @@ export function PatrolBoard() {
         <span className="radar-icon">
           <MoonStar />
         </span>
-        <div className="min-w-0">
-          <b className="block text-sm">Scheduled patrols</b>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between">
+            <b className="block text-sm">Scheduled patrols</b>
+            <InfoButton topic="safewalk-protocol" size="sm" title="Patrol & Escort Guidelines" />
+          </div>
           <small className="text-muted-foreground">
             Joined patrols show your live presence on the citizen map
           </small>
@@ -53,7 +58,10 @@ export function PatrolBoard() {
                 size="sm"
                 className="shrink-0 rounded-xl"
                 disabled={joined}
-                onClick={() => s.joinPatrol(p.id)}
+                onClick={() => {
+                  triggerHaptic("success");
+                  s.joinPatrol(p.id);
+                }}
               >
                 {joined ? (
                   <>
@@ -78,14 +86,20 @@ export function MarshalIdle() {
     <div className="px-5 pb-5">
       <div className="flex items-center justify-between">
         <div>
-          <Eyebrow>Marshal NG-DL-2841</Eyebrow>
+          <div className="flex items-center gap-1.5">
+            <Eyebrow>Marshal NG-DL-2841</Eyebrow>
+            <InfoButton topic="marshal-verification" size="sm" title="Marshal Verification Standards" />
+          </div>
           <h1 className="mt-1 text-xl font-extrabold">Ready to help nearby?</h1>
         </div>
         <button
-          onClick={() => s.setOnline(!s.marshalOnline)}
+          onClick={() => {
+            triggerHaptic("medium");
+            s.setOnline(!s.marshalOnline);
+          }}
           className={cn(
             "flex items-center gap-2 rounded-full px-3 py-2 text-xs font-bold",
-            s.marshalOnline ? "bg-safe-soft text-safe" : "bg-muted text-muted-foreground",
+            s.marshalOnline ? "bg-accent text-primary" : "bg-muted text-muted-foreground",
           )}
         >
           {s.marshalOnline ? <ToggleRight /> : <ToggleLeft />}
@@ -99,7 +113,7 @@ export function MarshalIdle() {
       </div>
       <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
         <span>
-          <LocateFixed className="inline h-4 w-4 text-safe" /> Accuracy 8 m
+          <LocateFixed className="inline h-4 w-4 text-primary" /> Accuracy 8 m
         </span>
         <span>96% response rate</span>
       </div>

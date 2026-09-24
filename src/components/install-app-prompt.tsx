@@ -85,7 +85,7 @@ export function InstallAppPrompt() {
     <div className="fixed inset-x-3 bottom-[max(96px,env(safe-area-inset-bottom))] z-[900] mx-auto max-w-[536px] sm:bottom-[max(110px,env(safe-area-inset-bottom))]">
       <div className="install-prompt rounded-[24px] border bg-card/96 p-3 shadow-soft backdrop-blur">
         <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-safe-soft text-primary">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-accent text-primary">
             <Smartphone className="h-5 w-5" />
           </span>
           <div className="min-w-0">

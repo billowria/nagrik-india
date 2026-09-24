@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/drawer";
 import { emergencyLines, useTraffic } from "@/lib/traffic-store";
 import { cn } from "@/lib/utils";
+import { triggerHaptic } from "@/lib/haptics";
+import { InfoButton } from "@/components/info-sheet";
 
 export function TrackLink() {
   const [copied, setCopied] = useState(false);
@@ -18,6 +20,7 @@ export function TrackLink() {
   return (
     <button
       onClick={() => {
+        triggerHaptic("selection");
         navigator.clipboard?.writeText(`https://${link}`).catch(() => {});
         setCopied(true);
         window.setTimeout(() => setCopied(false), 1600);
@@ -29,7 +32,7 @@ export function TrackLink() {
         <b className="block text-xs">Share live shield link</b>
         <small className="block truncate text-muted-foreground">{link}</small>
       </span>
-      {copied ? <Check className="text-safe" /> : <Copy className="text-muted-foreground" />}
+      {copied ? <Check className="text-primary" /> : <Copy className="text-muted-foreground" />}
     </button>
   );
 }
@@ -41,6 +44,7 @@ export function SosDock({ compact = false, className }: { compact?: boolean; cla
 
   useEffect(() => {
     if (count === null) return;
+    triggerHaptic(count === 0 ? "sos" : "medium");
     if (count <= 0) {
       s.triggerSos();
       setCount(null);
@@ -55,7 +59,10 @@ export function SosDock({ compact = false, className }: { compact?: boolean; cla
     <>
       <Button
         aria-label="Emergency SOS"
-        onClick={() => setCount(5)}
+        onClick={() => {
+          triggerHaptic("warning");
+          setCount(5);
+        }}
         className={cn("sos-fab", compact && "sos-fab--compact", className)}
       >
         <ShieldAlert className={compact ? "h-4 w-4" : "h-5 w-5"} />
@@ -63,6 +70,8 @@ export function SosDock({ compact = false, className }: { compact?: boolean; cla
       </Button>
 
       {count !== null &&
+        typeof document !== "undefined" &&
+        document.body &&
         createPortal(
           <div className="sos-overlay" role="alertdialog" aria-label="Emergency countdown">
             <div className="sos-ring">
@@ -90,10 +99,13 @@ export function SosDock({ compact = false, className }: { compact?: boolean; cla
       >
         <DrawerContent className="mx-auto max-w-[560px] rounded-t-3xl bg-background">
           <DrawerHeader className="px-5 text-left">
-            <DrawerTitle className="flex items-center gap-2 text-danger">
-              <Siren />
-              Emergency shield active
-            </DrawerTitle>
+            <div className="flex items-center justify-between">
+              <DrawerTitle className="flex items-center gap-2 text-danger">
+                <Siren />
+                Emergency shield active
+              </DrawerTitle>
+              <InfoButton topic="sos-dispatch" size="sm" title="Emergency Protocol" />
+            </div>
             <DrawerDescription>
               Your live location is shared with your trusted circle and nearby marshals.
             </DrawerDescription>
@@ -113,7 +125,7 @@ export function SosDock({ compact = false, className }: { compact?: boolean; cla
                 </a>
               ))}
             </div>
-            <div className="mt-3 rounded-2xl bg-safe-soft p-3 text-xs text-safe">
+            <div className="mt-3 rounded-2xl bg-accent p-3 text-xs text-primary">
               <ShieldCheck className="mr-2 inline h-4 w-4" />3 marshals within 1.2 km acknowledged
               your alert.
             </div>

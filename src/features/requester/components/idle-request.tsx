@@ -13,6 +13,9 @@ import { stageCopy, useTraffic, type RequestMode } from "@/lib/traffic-store";
 import { Eyebrow } from "@/features/shared/components/common";
 import { timeAgo } from "@/features/shared/components/notification-bell";
 import { cn } from "@/lib/utils";
+import { triggerHaptic } from "@/lib/haptics";
+import { InfoButton } from "@/components/info-sheet";
+import { AnimatedShield } from "@/components/animated-icons";
 
 export function LiveWardFeed() {
   const s = useTraffic();
@@ -67,6 +70,7 @@ export function LiveWardFeed() {
             key={x.id}
             className="feed-chip"
             onClick={() => {
+              triggerHaptic("light");
               if (x.reportId) s.selectHazard(x.reportId);
             }}
           >
@@ -93,14 +97,23 @@ export function IdleRequest({
     <div className="civic-dock px-4 pb-4">
       <div className="civic-dock-head">
         <div className="min-w-0">
-          <Eyebrow>Civic action centre</Eyebrow>
+          <div className="flex items-center gap-1.5">
+            <Eyebrow>Civic action centre</Eyebrow>
+            <InfoButton topic="reporting-bounties" size="sm" title="Civic Reporting Guide" />
+          </div>
           <h1 className="mt-1 truncate text-lg font-extrabold">How can Nagrik help?</h1>
         </div>
         <span className="marshal-live">
           <i />8 marshals nearby
         </span>
       </div>
-      <Button className="civic-action civic-action-community" onClick={() => onChoose("community")}>
+      <Button
+        className="civic-action civic-action-community"
+        onClick={() => {
+          triggerHaptic("medium");
+          onChoose("community");
+        }}
+      >
         <span className="civic-action-icon">
           <Megaphone />
         </span>
@@ -114,7 +127,10 @@ export function IdleRequest({
         <Button
           variant="outline"
           className="civic-action civic-action-personal"
-          onClick={() => onChoose("personal")}
+          onClick={() => {
+            triggerHaptic("medium");
+            onChoose("personal");
+          }}
         >
           <span className="civic-action-icon">
             <LifeBuoy />
@@ -125,9 +141,16 @@ export function IdleRequest({
           </span>
           <ArrowRight className="civic-action-arrow" />
         </Button>
-        <Button variant="outline" className="civic-action civic-action-walk" onClick={onSafeWalk}>
+        <Button
+          variant="outline"
+          className="civic-action civic-action-walk"
+          onClick={() => {
+            triggerHaptic("medium");
+            onSafeWalk();
+          }}
+        >
           <span className="civic-action-icon">
-            <Footprints />
+            <AnimatedShield size={20} active />
           </span>
           <span>
             <b>SafeWalk</b>

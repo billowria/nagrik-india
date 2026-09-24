@@ -49,7 +49,7 @@ export function IssueStep({ issue, setIssue }: { issue: string; setIssue: (x: st
             onClick={() => setIssue(title)}
             className={cn(
               "grid h-auto min-h-20 w-full grid-cols-[auto_1fr_auto] items-center gap-3 whitespace-normal rounded-2xl p-3 text-left",
-              issue === title && "border-primary bg-safe-soft ring-2 ring-primary/15",
+              issue === title && "border-primary bg-accent ring-2 ring-primary/15",
             )}
           >
             <span
@@ -73,7 +73,7 @@ export function IssueStep({ issue, setIssue }: { issue: string; setIssue: (x: st
               </span>
               <span className="mt-0.5 block text-xs font-medium text-muted-foreground">{desc}</span>
             </span>
-            <CheckCircle2 className={cn("text-border", issue === title && "text-safe")} />
+            <CheckCircle2 className={cn("text-border", issue === title && "text-primary")} />
           </Button>
         ))}
       </div>
@@ -200,7 +200,7 @@ export function PhotoStep({
       <div
         className={cn(
           "mt-8 grid min-h-72 place-items-center overflow-hidden rounded-3xl border-2 border-dashed bg-card p-6 text-center",
-          photo && "border-safe bg-safe-soft",
+          photo && "border-primary bg-accent",
         )}
       >
         {photo ? (
@@ -210,7 +210,7 @@ export function PhotoStep({
               alt="Civic issue evidence preview"
               className="mx-auto h-40 w-full max-w-xs rounded-2xl object-cover"
             />
-            <CheckCircle2 className="mx-auto mt-4 text-safe" />
+            <CheckCircle2 className="mx-auto mt-4 text-primary" />
             <b className="mt-2 block">Evidence ready for the map</b>
             <div className="mt-4 flex justify-center gap-2">
               <Button variant="outline" onClick={() => add()}>
@@ -313,7 +313,7 @@ export function CommunityContext({
               onClick={() => toggle(g)}
               className={cn(
                 "rounded-2xl border bg-card p-3 text-center transition active:scale-95",
-                on && "border-primary bg-safe-soft ring-2 ring-primary/15",
+                on && "border-primary bg-accent ring-2 ring-primary/15",
               )}
             >
               <Users
@@ -334,7 +334,7 @@ export function CommunityContext({
             onClick={() => setPriority(p)}
             className={cn(
               "rounded-2xl border bg-card px-2 py-3 text-center text-[11px] font-bold transition active:scale-95",
-              priority === p && "border-primary bg-safe-soft ring-2 ring-primary/15",
+              priority === p && "border-primary bg-accent ring-2 ring-primary/15",
             )}
           >
             {p}
@@ -405,7 +405,7 @@ export function ConfirmStep({
         ) : (
           <SummaryRow label="Response" value="Nearby verified marshal" strong />
         )}
-        <div className="mt-4 flex gap-2 rounded-xl bg-safe-soft p-3 text-xs text-safe">
+        <div className="mt-4 flex gap-2 rounded-xl bg-accent p-3 text-xs text-primary">
           <ShieldCheck className="h-4 w-4 shrink-0" />
           {community
             ? "Publishing does not dispatch or charge for a marshal."

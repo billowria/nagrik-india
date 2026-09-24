@@ -115,7 +115,7 @@ export function SafeWalkChatDrawer({
     }, 40);
   };
 
-  if (!mounted) return null;
+  if (!mounted || !open || typeof document === "undefined" || !document.body) return null;
 
   return createPortal(
     <AnimatePresence>

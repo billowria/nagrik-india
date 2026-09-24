@@ -44,6 +44,9 @@ import { BeforeAfter } from "@/features/shared/components/before-after";
 import { Eyebrow } from "@/features/shared/components/common";
 import { timeAgo } from "@/features/shared/components/notification-bell";
 import { cn } from "@/lib/utils";
+import { triggerHaptic } from "@/lib/haptics";
+import { InfoButton } from "@/components/info-sheet";
+import { AnimatedShield, AnimatedEndorse } from "@/components/animated-icons";
 
 // ── BACKWARDS COMPATIBILITY EXPORTS FOR MARSHAL FLOWS ──
 export function PromiseMeter({ report }: { report: CommunityReport }) {
@@ -80,7 +83,7 @@ export function StatusCard({ marshal = false }: { marshal?: boolean }) {
           </Eyebrow>
           <h3 className="mt-1 font-extrabold">{s.activeJob.issue}</h3>
         </div>
-        <span className="rounded-full bg-safe/15 px-3 py-1 text-xs font-bold text-safe">
+        <span className="rounded-full bg-primary/15 px-3 py-1 text-xs font-bold text-primary">
           {s.activeJob.outcome}
         </span>
       </div>
@@ -121,7 +124,7 @@ export function HistoryList() {
                   "grid h-10 w-10 place-items-center rounded-xl",
                   j.outcome === "Escalated"
                     ? "bg-danger-soft text-danger"
-                    : "bg-safe-soft text-safe",
+                    : "bg-accent text-primary",
                 )}
               >
                 {shared ? <Users /> : <ReceiptIndianRupee />}
@@ -158,7 +161,7 @@ export function HeroActiveBanner({ onOpenDetail }: { onOpenDetail?: (reportId: s
 
   if (walk) {
     return (
-      <div className="rounded-3xl border border-safe/30 bg-gradient-to-br from-card via-safe-soft/40 to-card p-4.5 shadow-sm">
+      <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-card via-safe-soft/40 to-card p-4.5 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-safe">
             <span className="relative flex h-2.5 w-2.5">
@@ -167,14 +170,17 @@ export function HeroActiveBanner({ onOpenDetail }: { onOpenDetail?: (reportId: s
             </span>
             Active SafeWalk in Progress
           </div>
-          <span className="rounded-full bg-safe/15 px-2.5 py-0.5 text-[10px] font-black text-safe">
-            {walk.safetyScore}% Safe
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className="rounded-full bg-primary/15 px-2.5 py-0.5 text-[10px] font-black text-safe">
+              {walk.safetyScore}% Safe
+            </span>
+            <InfoButton topic="safewalk-protocol" size="sm" title="SafeWalk Guarantee" />
+          </div>
         </div>
 
         <div className="mt-3 flex items-center gap-3">
           <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-safe text-white shadow-soft">
-            <Footprints className="h-6 w-6" />
+            <AnimatedShield size={24} active />
           </div>
           <div className="min-w-0 flex-1">
             <h4 className="truncate text-base font-extrabold text-foreground">
@@ -188,7 +194,7 @@ export function HeroActiveBanner({ onOpenDetail }: { onOpenDetail?: (reportId: s
 
         <Button
           size="sm"
-          className="mt-3.5 h-10 w-full rounded-2xl bg-safe hover:bg-safe/90 text-white font-extrabold text-xs shadow-soft"
+          className="mt-3.5 h-10 w-full rounded-2xl bg-safe hover:bg-primary/90 text-white font-extrabold text-xs shadow-soft"
           onClick={() => nav({ to: "/requester/home" })}
         >
           <span>Return to Live Walk</span>
@@ -278,7 +284,7 @@ export function LifecycleReportCard({
             className={cn(
               "rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider",
               isResolved
-                ? "bg-safe-soft text-safe"
+                ? "bg-accent text-primary"
                 : report.priority === "High"
                   ? "bg-danger-soft text-danger"
                   : "bg-amber-500/15 text-amber-700",
@@ -313,7 +319,7 @@ export function LifecycleReportCard({
       <div className="mt-4 pt-3.5 border-t border-border/60">
         <div className="flex items-center justify-between text-[10px] font-extrabold mb-1.5">
           <span className="text-muted-foreground uppercase tracking-wider">Status Tracker</span>
-          <span className={cn(isResolved ? "text-safe" : "text-primary")}>
+          <span className={cn(isResolved ? "text-primary" : "text-primary")}>
             {isResolved ? "Resolution Verified" : isAssigned ? "Marshal On-Site" : "Awaiting Triage"}
           </span>
         </div>
@@ -322,7 +328,7 @@ export function LifecycleReportCard({
           {/* Track line behind */}
           <div className="absolute left-2 right-2 top-2 h-1 -translate-y-1/2 bg-muted/80 rounded-full" />
           <div
-            className="absolute left-2 top-2 h-1 -translate-y-1/2 bg-gradient-to-r from-primary to-safe rounded-full transition-all duration-500"
+            className="absolute left-2 top-2 h-1 -translate-y-1/2 bg-gradient-to-r from-primary to-primary rounded-full transition-all duration-500"
             style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
           />
 
@@ -332,7 +338,7 @@ export function LifecycleReportCard({
                 className={cn(
                   "grid h-4 w-4 place-items-center rounded-full text-[9px] font-black transition-all",
                   st.active
-                    ? "bg-safe text-white shadow-xs"
+                    ? "bg-primary text-white shadow-xs"
                     : "bg-card border-2 border-border text-muted-foreground",
                 )}
               >
@@ -367,12 +373,16 @@ export function LifecycleReportCard({
         </div>
 
         <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+          <InfoButton topic="reporting-bounties" size="sm" title="Hazard Resolution & Bounty Guide" />
           <Button
             size="sm"
             variant={report.supportedByMe ? "secondary" : "outline"}
             className="h-8 rounded-xl px-2.5 text-xs font-bold"
             disabled={report.supportedByMe}
-            onClick={() => s.supportCommunityReport(report.id)}
+            onClick={() => {
+              triggerHaptic("medium");
+              s.supportCommunityReport(report.id);
+            }}
           >
             {report.supportedByMe ? (
               <>
@@ -406,14 +416,17 @@ export function LifecycleReportCard({
 // ── 3. SAFEWALK HISTORY CARD ──
 export function SafeWalkHistoryCard({ walk }: { walk: SafeWalkSummary }) {
   return (
-    <article className="rounded-3xl border border-border/80 bg-card p-4.5 shadow-xs transition-all hover:border-safe/40">
+    <article className="rounded-3xl border border-border/80 bg-card p-4.5 shadow-xs transition-all hover:border-primary/40">
       <div className="flex items-center justify-between">
         <span className="rounded-full bg-safe-soft px-2.5 py-0.5 text-[10px] font-black uppercase text-safe">
           Protected Journey Completed
         </span>
-        <span className="text-[11px] font-semibold text-muted-foreground">
-          {timeAgo(walk.completedAt)}
-        </span>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[11px] font-semibold text-muted-foreground">
+            {timeAgo(walk.completedAt)}
+          </span>
+          <InfoButton topic="safewalk-protocol" size="sm" title="SafeWalk Protocol Details" />
+        </div>
       </div>
 
       <div className="mt-3 flex items-start gap-3">
@@ -427,7 +440,7 @@ export function SafeWalkHistoryCard({ walk }: { walk: SafeWalkSummary }) {
           </p>
         </div>
         <div className="text-right">
-          <span className="rounded-full bg-safe/15 px-2 py-0.5 text-[11px] font-black text-safe">
+          <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[11px] font-black text-safe">
             {walk.safetyScore}% Safe
           </span>
           <small className="block text-[10px] font-bold text-safe mt-1">
@@ -442,10 +455,10 @@ export function SafeWalkHistoryCard({ walk }: { walk: SafeWalkSummary }) {
 // ── 4. WARD HEALTH CARD ──
 export function WardHealthCard() {
   return (
-    <div className="rounded-3xl border border-safe/30 bg-gradient-to-br from-card via-safe-soft/25 to-card p-5 shadow-sm">
+    <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-card via-accent/25 to-card p-5 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="grid h-8 w-8 place-items-center rounded-xl bg-safe text-white shadow-soft">
+          <span className="grid h-8 w-8 place-items-center rounded-xl bg-primary text-white shadow-soft">
             <Trophy className="h-4 w-4" />
           </span>
           <div>
@@ -453,19 +466,22 @@ export function WardHealthCard() {
             <h3 className="text-sm font-black text-foreground">Ward 42 · Hauz Khas</h3>
           </div>
         </div>
-        <div className="text-right">
-          <div className="flex items-center gap-1 text-xs font-black text-safe">
-            <TrendingUp className="h-3.5 w-3.5" />
-            <span>Rank #2 (+2)</span>
+        <div className="flex items-center gap-1.5">
+          <div className="text-right">
+            <div className="flex items-center gap-1 text-xs font-black text-primary">
+              <TrendingUp className="h-3.5 w-3.5" />
+              <span>Rank #2 (+2)</span>
+            </div>
+            <small className="text-[10px] text-muted-foreground">South Delhi Region</small>
           </div>
-          <small className="text-[10px] text-muted-foreground">South Delhi Region</small>
+          <InfoButton topic="civic-score" size="sm" title="Civic Health Index Guide" />
         </div>
       </div>
 
       {/* Main Score Radial / Stat */}
-      <div className="mt-4 grid grid-cols-3 gap-2.5 pt-3 border-t border-safe/20 text-center">
+      <div className="mt-4 grid grid-cols-3 gap-2.5 pt-3 border-t border-primary/20 text-center">
         <div className="rounded-2xl bg-card/80 p-3 border border-border/60">
-          <b className="text-xl font-black text-safe">94/100</b>
+          <b className="text-xl font-black text-primary">94/100</b>
           <p className="text-[10px] font-bold text-muted-foreground mt-0.5">Civic Score</p>
         </div>
         <div className="rounded-2xl bg-card/80 p-3 border border-border/60">
@@ -490,6 +506,7 @@ export function CommunityPetitionCard({ report }: { report: CommunityReport }) {
   const progress = Math.min(100, Math.round((sig / petitionGoal) * 100));
 
   const handleSign = () => {
+    triggerHaptic("success");
     s.signPetition(report.id);
     setJustSigned(true);
   };
@@ -501,9 +518,12 @@ export function CommunityPetitionCard({ report }: { report: CommunityReport }) {
           <ScrollText className="h-3 w-3" />
           Municipal Action Needed
         </span>
-        <span className="text-[11px] font-bold text-muted-foreground">
-          {report.distance} away
-        </span>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[11px] font-bold text-muted-foreground">
+            {report.distance} away
+          </span>
+          <InfoButton topic="reporting-bounties" size="sm" title="Municipal Commission Threshold" />
+        </div>
       </div>
 
       <h4 className="mt-2.5 text-sm font-extrabold text-foreground">{report.issue}</h4>
@@ -519,7 +539,7 @@ export function CommunityPetitionCard({ report }: { report: CommunityReport }) {
         </div>
         <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-primary to-safe transition-all duration-500"
+            className="h-full rounded-full bg-gradient-to-r from-primary to-primary/60 transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -537,7 +557,7 @@ export function CommunityPetitionCard({ report }: { report: CommunityReport }) {
           size="sm"
           className={cn(
             "h-9 rounded-xl px-4 font-extrabold text-xs transition-all shadow-xs",
-            isSigned ? "bg-safe text-white" : "bg-primary hover:bg-primary/90 text-white",
+            isSigned ? "bg-primary text-white" : "bg-primary hover:bg-primary/90 text-white",
           )}
           disabled={isSigned}
           onClick={handleSign}
@@ -575,10 +595,10 @@ export function VerifiedEvidenceGallery({ reports }: { reports: CommunityReport[
       };
 
   return (
-    <div className="rounded-3xl border border-safe/30 bg-card p-4.5 shadow-sm">
+    <div className="rounded-3xl border border-primary/30 bg-card p-4.5 shadow-sm">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className="grid h-8 w-8 place-items-center rounded-xl bg-safe-soft text-safe">
+          <span className="grid h-8 w-8 place-items-center rounded-xl bg-accent text-primary">
             <BadgeCheck className="h-4 w-4" />
           </span>
           <div>
@@ -586,7 +606,7 @@ export function VerifiedEvidenceGallery({ reports }: { reports: CommunityReport[
             <h3 className="text-sm font-black text-foreground">Before & After Resolution</h3>
           </div>
         </div>
-        <span className="rounded-full bg-safe/15 px-2 py-0.5 text-[10px] font-black text-safe">
+        <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-black text-primary">
           Verified
         </span>
       </div>
@@ -640,7 +660,7 @@ export function WardLeaderboardCard() {
             className={cn(
               "flex items-center justify-between rounded-2xl p-2.5 text-xs transition-colors",
               r.isUser
-                ? "bg-safe-soft border border-safe/30 font-extrabold text-foreground"
+                ? "bg-accent border border-primary/30 font-extrabold text-foreground"
                 : "bg-muted/30 text-muted-foreground",
             )}
           >
@@ -648,7 +668,7 @@ export function WardLeaderboardCard() {
               <span
                 className={cn(
                   "grid h-6 w-6 place-items-center rounded-full text-[10px] font-black",
-                  r.isUser ? "bg-safe text-white" : "bg-card text-foreground",
+                  r.isUser ? "bg-primary text-white" : "bg-card text-foreground",
                 )}
               >
                 {r.rank}
@@ -656,7 +676,7 @@ export function WardLeaderboardCard() {
               <span className="truncate">{r.name}</span>
             </div>
             <div className="flex items-center gap-2 font-bold shrink-0">
-              <span className="text-[10px] text-safe font-black">{r.delta}</span>
+              <span className="text-[10px] text-primary font-black">{r.delta}</span>
               <span className="text-foreground">{r.pts.toLocaleString()} pts</span>
             </div>
           </div>

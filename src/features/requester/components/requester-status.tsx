@@ -38,7 +38,7 @@ export function EtaTicker() {
           {arrived ? "Marshal has arrived" : `Arriving in about ${s.etaMinutes} min`}
         </b>
         <small className="text-muted-foreground">
-          On Aurobindo Marg · green motorcycle, reflective vest
+          On Aurobindo Marg · blue motorcycle, reflective vest
         </small>
         <div className="eta-track">
           <i style={{ width: `${Math.min(100, Math.max(8, ((6 - s.etaMinutes) / 6) * 100))}%` }} />
@@ -55,7 +55,7 @@ const commsLines = {
     "I’ve moved to a safe spot",
   ],
   marshal: [
-    "I’m on a green motorcycle with a reflective vest",
+    "I’m on a blue motorcycle with a reflective vest",
     "Arriving at Metro Gate 2 in 2 mins",
     "Setting up warning cones now",
   ],
@@ -150,7 +150,7 @@ export function RequesterStatus() {
         <span
           className={cn(
             "grid h-12 w-12 shrink-0 place-items-center rounded-2xl",
-            s.stage === "finding" ? "bg-orange-soft text-primary" : "bg-safe-soft text-safe",
+            s.stage === "finding" ? "bg-orange-soft text-primary" : "bg-accent text-primary",
           )}
         >
           {shared ? (

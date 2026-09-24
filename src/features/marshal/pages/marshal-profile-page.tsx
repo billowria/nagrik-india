@@ -71,7 +71,7 @@ export function MarshalLevelPanel() {
           <small
             className={cn(
               "mt-1 block font-extrabold",
-              s.topResponder ? "text-safe" : "text-muted-foreground",
+              s.topResponder ? "text-primary" : "text-muted-foreground",
             )}
           >
             {s.topResponder ? "Earned" : "Locked"}
@@ -95,7 +95,7 @@ export function MarshalCredential() {
           {["Civic honours ×4", "Safety trained", "96% response"].map((x) => (
             <span
               key={x}
-              className="rounded-full bg-safe-soft px-2 py-1 text-[9px] font-extrabold text-safe"
+              className="rounded-full bg-accent px-2 py-1 text-[9px] font-extrabold text-primary"
             >
               {x}
             </span>
@@ -121,7 +121,7 @@ export function MarshalProfilePage() {
         <div>
           <h2 className="text-xl font-extrabold">Riya Sharma</h2>
           <p className="text-xs text-muted-foreground">Marshal NG-DL-2841</p>
-          <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-safe-soft px-2 py-1 text-[10px] font-bold text-safe">
+          <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-accent px-2 py-1 text-[10px] font-bold text-primary">
             <BadgeCheck className="h-3 w-3" />
             Verified
           </span>
@@ -170,7 +170,7 @@ export function MarshalProfilePage() {
         onClick={() => s.setOnline(!s.marshalOnline)}
         className="mt-4 flex w-full items-center justify-between rounded-2xl bg-cream p-4 text-sm font-bold"
       >
-        Availability {s.marshalOnline ? <ToggleRight className="text-safe" /> : <ToggleLeft />}
+        Availability {s.marshalOnline ? <ToggleRight className="text-primary" /> : <ToggleLeft />}
       </button>
 
       <Button
