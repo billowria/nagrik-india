@@ -91,6 +91,15 @@ export function ActivityDetailSheet({
     setMounted(true);
   }, []);
 
+  // Lock body scroll when detail sheet is open
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -118,6 +127,15 @@ export function ActivityDetailSheet({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: "100%", opacity: 0 }}
           transition={{ type: "spring", damping: 28, stiffness: 320 }}
+          drag="y"
+          dragConstraints={{ top: 0, bottom: 0 }}
+          dragElastic={{ top: 0, bottom: 0.4 }}
+          onDragEnd={(_e, info) => {
+            if (info.offset.y > 90 || info.velocity.y > 350) {
+              triggerHaptic("light");
+              onClose();
+            }
+          }}
           className="relative z-10 w-full max-w-lg max-h-[88dvh] overflow-y-auto rounded-t-[32px] sm:rounded-3xl border border-border bg-card p-5 shadow-2xl overscroll-contain"
         >
           {/* Header Grabber & Close */}

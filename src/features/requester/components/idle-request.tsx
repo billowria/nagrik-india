@@ -12,10 +12,11 @@ import { Button } from "@/components/ui/button";
 import { stageCopy, useTraffic, type RequestMode } from "@/lib/traffic-store";
 import { Eyebrow } from "@/features/shared/components/common";
 import { timeAgo } from "@/features/shared/components/notification-bell";
-import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 import { triggerHaptic } from "@/lib/haptics";
-import { InfoButton } from "@/components/info-sheet";
+import { InfoButton, InfoSheet } from "@/components/info-sheet";
 import { AnimatedShield } from "@/components/animated-icons";
+import { cn } from "@/lib/utils";
 
 export function LiveWardFeed() {
   const s = useTraffic();
@@ -86,6 +87,58 @@ export function LiveWardFeed() {
   );
 }
 
+export function NagrikLiveBadge() {
+  const [openInfo, setOpenInfo] = useState(false);
+
+  return (
+    <>
+      <motion.button
+        type="button"
+        whileTap={{ scale: 0.94 }}
+        whileHover={{ scale: 1.03 }}
+        onClick={() => {
+          triggerHaptic("selection");
+          setOpenInfo(true);
+        }}
+        className="group relative flex items-center gap-2 rounded-full border border-primary/25 bg-card/95 py-1.5 pl-2 pr-3 shadow-xs backdrop-blur-md transition-all hover:border-primary/50 hover:shadow-soft active:scale-[0.97]"
+        title="Nagrik Marshal Fleet · Tap for details"
+      >
+        {/* Animated Nagrik Shield Core with radar aura */}
+        <span className="relative grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
+          <motion.span
+            className="absolute -inset-1 rounded-full bg-primary/20"
+            animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <ShieldCheck className="relative z-10 h-3.5 w-3.5 stroke-[2.4]" />
+        </span>
+
+        {/* Live Telemetry Info */}
+        <div className="text-left leading-tight">
+          <div className="flex items-center gap-1.5">
+            <span className="relative flex h-1.5 w-1.5 shrink-0">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+            </span>
+            <b className="text-[11px] font-black tracking-tight text-foreground whitespace-nowrap">
+              8 Nagrik Marshals
+            </b>
+          </div>
+          <span className="mt-0.5 block text-[9.5px] font-bold text-primary whitespace-nowrap">
+            Ward 42 Patrol · ~2.4m
+          </span>
+        </div>
+      </motion.button>
+
+      <InfoSheet
+        topic="marshal-verification"
+        open={openInfo}
+        onClose={() => setOpenInfo(false)}
+      />
+    </>
+  );
+}
+
 export function IdleRequest({
   onChoose,
   onSafeWalk,
@@ -103,9 +156,7 @@ export function IdleRequest({
           </div>
           <h1 className="mt-1 truncate text-lg font-extrabold">How can Nagrik help?</h1>
         </div>
-        <span className="marshal-live">
-          <i />8 marshals nearby
-        </span>
+        <NagrikLiveBadge />
       </div>
       <Button
         className="civic-action civic-action-community"

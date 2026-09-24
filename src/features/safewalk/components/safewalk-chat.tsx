@@ -92,6 +92,16 @@ export function SafeWalkChatDrawer({
     }
   }, [open]);
 
+  // Lock body scroll when chat is open
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
   // Handle ESC key to close
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -115,14 +125,18 @@ export function SafeWalkChatDrawer({
     }, 40);
   };
 
-  if (!mounted || !open || typeof document === "undefined" || !document.body) return null;
+  if (!mounted || typeof document === "undefined" || !document.body) return null;
 
   return createPortal(
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-[9999] flex flex-col justify-end sm:items-center sm:justify-center p-0 sm:p-4">
+        <div
+          key="safewalk-chat-portal"
+          className="fixed inset-0 z-[9999] flex flex-col justify-end sm:items-center sm:justify-center p-0 sm:p-4"
+        >
           {/* Backdrop */}
           <motion.div
+            key="chat-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -134,10 +148,19 @@ export function SafeWalkChatDrawer({
 
           {/* Chat Window / Sheet */}
           <motion.div
+            key="chat-panel"
             initial={{ y: "100%", opacity: 0.8 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
             transition={{ type: "spring", damping: 30, stiffness: 340 }}
+            drag="y"
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={{ top: 0, bottom: 0.4 }}
+            onDragEnd={(_e, info) => {
+              if (info.offset.y > 90 || info.velocity.y > 350) {
+                onClose();
+              }
+            }}
             className="relative z-10 flex flex-col w-full max-w-lg h-[86dvh] sm:h-[640px] max-h-[92dvh] rounded-t-[32px] sm:rounded-3xl border border-border/80 bg-card text-foreground shadow-2xl overflow-hidden"
           >
             {/* Sheet Pull Grabber (mobile) */}

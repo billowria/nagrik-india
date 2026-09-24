@@ -161,17 +161,17 @@ export function HeroActiveBanner({ onOpenDetail }: { onOpenDetail?: (reportId: s
 
   if (walk) {
     return (
-      <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-card via-safe-soft/40 to-card p-4.5 shadow-sm">
+      <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-card via-primary/10 to-card p-4.5 shadow-sm">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-safe">
+          <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-primary">
             <span className="relative flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-safe opacity-75" />
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-safe" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary" />
             </span>
             Active SafeWalk in Progress
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="rounded-full bg-primary/15 px-2.5 py-0.5 text-[10px] font-black text-safe">
+            <span className="rounded-full bg-primary/15 px-2.5 py-0.5 text-[10px] font-black text-primary">
               {walk.safetyScore}% Safe
             </span>
             <InfoButton topic="safewalk-protocol" size="sm" title="SafeWalk Guarantee" />
@@ -179,7 +179,7 @@ export function HeroActiveBanner({ onOpenDetail }: { onOpenDetail?: (reportId: s
         </div>
 
         <div className="mt-3 flex items-center gap-3">
-          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-safe text-white shadow-soft">
+          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary text-white shadow-soft">
             <AnimatedShield size={24} active />
           </div>
           <div className="min-w-0 flex-1">
@@ -194,7 +194,7 @@ export function HeroActiveBanner({ onOpenDetail }: { onOpenDetail?: (reportId: s
 
         <Button
           size="sm"
-          className="mt-3.5 h-10 w-full rounded-2xl bg-safe hover:bg-primary/90 text-white font-extrabold text-xs shadow-soft"
+          className="mt-3.5 h-10 w-full rounded-2xl bg-primary hover:bg-primary/90 text-white font-extrabold text-xs shadow-soft"
           onClick={() => nav({ to: "/requester/home" })}
         >
           <span>Return to Live Walk</span>
@@ -418,7 +418,7 @@ export function SafeWalkHistoryCard({ walk }: { walk: SafeWalkSummary }) {
   return (
     <article className="rounded-3xl border border-border/80 bg-card p-4.5 shadow-xs transition-all hover:border-primary/40">
       <div className="flex items-center justify-between">
-        <span className="rounded-full bg-safe-soft px-2.5 py-0.5 text-[10px] font-black uppercase text-safe">
+        <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-black uppercase text-primary">
           Protected Journey Completed
         </span>
         <div className="flex items-center gap-1.5">
@@ -430,7 +430,7 @@ export function SafeWalkHistoryCard({ walk }: { walk: SafeWalkSummary }) {
       </div>
 
       <div className="mt-3 flex items-start gap-3">
-        <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-safe-soft text-safe shadow-xs">
+        <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-primary/10 text-primary shadow-xs">
           <Footprints className="h-5 w-5" />
         </div>
         <div className="min-w-0 flex-1">
@@ -440,10 +440,10 @@ export function SafeWalkHistoryCard({ walk }: { walk: SafeWalkSummary }) {
           </p>
         </div>
         <div className="text-right">
-          <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[11px] font-black text-safe">
+          <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[11px] font-black text-primary">
             {walk.safetyScore}% Safe
           </span>
-          <small className="block text-[10px] font-bold text-safe mt-1">
+          <small className="block text-[10px] font-bold text-primary mt-1">
             +{walk.trustPoints} pts
           </small>
         </div>
@@ -777,7 +777,7 @@ export function MyActivityTab({
               Start your first protected walk with live route corridor tracking.
             </p>
             <Button
-              className="mt-4 rounded-2xl bg-safe text-white font-extrabold text-xs shadow-soft"
+              className="mt-4 rounded-2xl bg-primary hover:bg-primary/90 text-white font-extrabold text-xs shadow-soft"
               onClick={() => nav({ to: "/requester/home" })}
             >
               Start SafeWalk

@@ -242,6 +242,17 @@ export function InfoSheet({
     setMounted(true);
   }, []);
 
+  // Lock body scroll when sheet is open
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  // Handle ESC key to dismiss
   useEffect(() => {
     if (!open) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -251,7 +262,7 @@ export function InfoSheet({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [open, onClose]);
 
-  if (!mounted || !open || typeof document === "undefined" || !document.body) return null;
+  if (!mounted || typeof document === "undefined" || !document.body) return null;
 
   const content = TOPIC_REGISTRY[topic];
   if (!content) return null;
@@ -268,34 +279,36 @@ export function InfoSheet({
   return createPortal(
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-[800] flex items-end justify-center p-0 sm:items-center sm:p-4">
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => {
+        <motion.div
+          key="info-sheet-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
               triggerHaptic("light");
               onClose();
-            }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm"
-          />
-
-          {/* Sliding Sheet */}
+            }
+          }}
+          className="fixed inset-0 z-[99999] grid place-items-end justify-items-center p-3 pb-[max(16px,env(safe-area-inset-bottom))] sm:place-items-center sm:p-4 bg-black/60 backdrop-blur-sm"
+        >
+          {/* Card */}
           <motion.div
+            key="info-sheet-card"
             role="dialog"
             aria-modal="true"
-            initial={{ y: "100%", opacity: 0.5 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "100%", opacity: 0 }}
-            transition={{ type: "spring", damping: 30, stiffness: 340 }}
-            className="relative z-10 w-full max-w-lg max-h-[90dvh] overflow-y-auto rounded-t-[32px] sm:rounded-3xl border border-border bg-card p-5 sm:p-6 shadow-2xl overscroll-contain"
+            initial={{ y: 35, opacity: 0, scale: 0.96 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 35, opacity: 0, scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 340, damping: 28 }}
+            className="relative flex w-full max-w-[500px] max-h-[82dvh] flex-col rounded-[28px] border border-border bg-card shadow-2xl overflow-hidden"
           >
             {/* Grabber indicator */}
-            <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-muted-foreground/25" />
+            <div className="mx-auto mt-2.5 h-1.5 w-12 shrink-0 rounded-full bg-muted-foreground/25" />
 
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-border/60">
+            <div className="flex shrink-0 items-center justify-between border-b border-border/60 px-5 py-3">
               <span
                 className={cn(
                   "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider border",
@@ -313,84 +326,89 @@ export function InfoSheet({
                   triggerHaptic("light");
                   onClose();
                 }}
-                className="grid h-8 w-8 place-items-center rounded-full bg-muted/60 text-muted-foreground hover:text-foreground"
+                className="grid h-8 w-8 place-items-center rounded-full bg-muted/60 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <X className="h-4 w-4" />
               </motion.button>
             </div>
 
-            {/* Title & Icon */}
-            <div className="mt-4 flex items-start gap-3.5">
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/10 text-primary border border-primary/20 shadow-soft">
-                <Icon className="h-6 w-6" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h2 className="text-lg font-black text-foreground leading-snug tracking-tight">
-                  {content.title}
-                </h2>
-                <p className="mt-0.5 text-xs font-semibold text-muted-foreground">
-                  {content.subtitle}
-                </p>
-              </div>
-            </div>
-
-            {/* Summary card */}
-            <div className="mt-4 rounded-2xl border border-border/80 bg-accent/35 p-3.5 text-xs text-foreground leading-relaxed">
-              {content.summary}
-            </div>
-
-            {/* Steps & breakdown */}
-            <div className="mt-4 space-y-2.5">
-              <h3 className="text-xs font-black uppercase tracking-wider text-muted-foreground">
-                How It Works
-              </h3>
-              {content.steps.map((st, i) => (
-                <div
-                  key={st.title}
-                  className="flex items-start gap-3 rounded-xl border border-border/70 bg-card p-3 shadow-xs"
-                >
-                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-lg bg-primary/10 text-[11px] font-black text-primary">
-                    {i + 1}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <b className="block text-xs font-black text-foreground">{st.title}</b>
-                    <small className="mt-0.5 block text-[11px] text-muted-foreground leading-normal">
-                      {st.desc}
-                    </small>
-                  </div>
+            {/* Scrollable Body */}
+            <div className="flex-1 overflow-y-auto overscroll-contain p-5 space-y-4">
+              {/* Title & Icon */}
+              <div className="flex items-start gap-3.5">
+                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/10 text-primary border border-primary/20 shadow-soft">
+                  <Icon className="h-6 w-6" />
                 </div>
-              ))}
-            </div>
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-lg font-black text-foreground leading-snug tracking-tight">
+                    {content.title}
+                  </h2>
+                  <p className="mt-0.5 text-xs font-semibold text-muted-foreground">
+                    {content.subtitle}
+                  </p>
+                </div>
+              </div>
 
-            {/* Guarantees */}
-            <div className="mt-4 rounded-2xl bg-muted/50 p-3.5 border border-border/60">
-              <h4 className="text-[11px] font-black uppercase tracking-wider text-muted-foreground mb-2">
-                Guaranteed Standards
-              </h4>
-              <ul className="space-y-1.5 text-xs font-medium text-foreground">
-                {content.guarantees.map((g) => (
-                  <li key={g} className="flex items-center gap-2">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <span>{g}</span>
-                  </li>
+              {/* Summary card */}
+              <div className="rounded-2xl border border-border/80 bg-accent/35 p-3.5 text-xs text-foreground leading-relaxed">
+                {content.summary}
+              </div>
+
+              {/* Steps & breakdown */}
+              <div className="space-y-2.5">
+                <h3 className="text-xs font-black uppercase tracking-wider text-muted-foreground">
+                  How It Works
+                </h3>
+                {content.steps.map((st, i) => (
+                  <div
+                    key={st.title}
+                    className="flex items-start gap-3 rounded-xl border border-border/70 bg-card p-3 shadow-xs"
+                  >
+                    <span className="grid h-6 w-6 shrink-0 place-items-center rounded-lg bg-primary/10 text-[11px] font-black text-primary">
+                      {i + 1}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <b className="block text-xs font-black text-foreground">{st.title}</b>
+                      <small className="mt-0.5 block text-[11px] text-muted-foreground leading-normal">
+                        {st.desc}
+                      </small>
+                    </div>
+                  </div>
                 ))}
-              </ul>
+              </div>
+
+              {/* Guarantees */}
+              <div className="rounded-2xl bg-muted/50 p-3.5 border border-border/60">
+                <h4 className="text-[11px] font-black uppercase tracking-wider text-muted-foreground mb-2">
+                  Guaranteed Standards
+                </h4>
+                <ul className="space-y-1.5 text-xs font-medium text-foreground">
+                  {content.guarantees.map((g) => (
+                    <li key={g} className="flex items-center gap-2">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" />
+                      <span>{g}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            {/* Action button */}
-            <motion.button
-              type="button"
-              whileTap={{ scale: 0.96 }}
-              onClick={() => {
-                triggerHaptic("medium");
-                onClose();
-              }}
-              className="mt-5 h-12 w-full rounded-2xl bg-primary text-white font-extrabold text-sm shadow-warm hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
-            >
-              <span>I Understand</span>
-            </motion.button>
+            {/* Pinned Action Footer */}
+            <div className="shrink-0 border-t border-border/60 bg-card/90 p-4 backdrop-blur-md">
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.97 }}
+                onClick={() => {
+                  triggerHaptic("medium");
+                  onClose();
+                }}
+                className="h-12 w-full rounded-2xl bg-primary text-white font-extrabold text-sm shadow-warm hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
+              >
+                <span>I Understand</span>
+              </motion.button>
+            </div>
           </motion.div>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>,
     document.body,

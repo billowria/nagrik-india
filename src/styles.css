@@ -2603,7 +2603,7 @@ details:hover,
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--primary), #38bdf8);
+  background: linear-gradient(90deg, var(--primary), color-mix(in oklab, var(--primary) 70%, white));
   background-size: 200% 100%;
   animation: neon-flow 2.4s linear infinite;
   transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -2618,7 +2618,7 @@ details:hover,
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--primary), #38bdf8);
+  background: linear-gradient(90deg, var(--primary), color-mix(in oklab, var(--primary) 70%, white));
   background-size: 200% 100%;
   animation: neon-flow 2.4s linear infinite;
   transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);

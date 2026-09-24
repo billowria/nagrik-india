@@ -43,17 +43,26 @@ export function Nav({
               <motion.div
                 layoutId="active-nav-pill"
                 transition={{ type: "spring", stiffness: 450, damping: 32 }}
-                className="absolute inset-0 rounded-[18px] bg-primary/10 border border-primary/25 shadow-xs"
+                className="absolute inset-0 rounded-[18px] bg-primary/5 border border-primary/10 shadow-xs"
               />
             )}
-            <motion.span
-              whileTap={{ scale: 0.84 }}
-              animate={selected ? { scale: [1, 1.15, 1] } : { scale: 1 }}
-              transition={{ duration: 0.3 }}
-              className="relative z-10 nav-icon grid h-7 w-7 shrink-0 place-items-center"
-            >
-              <Icon className="h-5 w-5" fill={selected ? "currentColor" : "none"} />
-            </motion.span>
+            <div className="relative grid h-9 w-9 shrink-0 place-items-center">
+              {selected && (
+                <motion.div
+                  layoutId="active-nav-icon-border"
+                  transition={{ type: "spring", stiffness: 420, damping: 30, mass: 0.8 }}
+                  className="absolute inset-0 rounded-[14px] border-[1.5px] border-primary bg-primary/12 shadow-[0_0_16px_rgba(37,99,235,0.32)]"
+                />
+              )}
+              <motion.span
+                whileTap={{ scale: 0.85 }}
+                animate={selected ? { scale: [1, 1.16, 1] } : { scale: 1 }}
+                transition={{ duration: 0.28, ease: "easeOut" }}
+                className="relative z-10 nav-icon grid h-7 w-7 shrink-0 place-items-center"
+              >
+                <Icon className="h-5 w-5" fill={selected ? "currentColor" : "none"} />
+              </motion.span>
+            </div>
             <span className="relative z-10 w-full truncate text-center">{label}</span>
           </Link>
         );
